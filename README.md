@@ -2,6 +2,14 @@
 
 这是一个基于Spring Boot的智能医院挂号系统后端项目，提供完整的医院挂号流程管理、科室医生信息管理、用户登录注册以及AI智能导诊等功能。
 
+智能挂号项目分别放在三个代码仓库：
+
+1.用户端网页代码仓库： https://gitee.com/garveyer/intelligent-registration-user-front
+
+2.管理员端网页代码仓库： https://gitee.com/garveyer/intelligent-registration-admin-front
+
+3.后端代码仓库： https://gitee.com/garveyer/IntelligentRegistrationBack
+
 ## 功能特性
 
 - **智能导诊**：集成AI聊天机器人，提供智能问诊建议
