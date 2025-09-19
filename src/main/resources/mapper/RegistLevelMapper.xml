@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.edu.hospital.mapper.RegistLevelMapper">
+	<!-- 得到所有挂号级别 -->
+	<select id="getRegistLevelList" resultType="java.util.Map">
+		SELECT *
+		FROM regist_level
+	</select>
+
+	<select id="getRegistNameById" resultType="string">
+		SELECT regist_name
+		FROM regist_level
+		WHERE id = #{registLevelId}
+	</select>
+
+</mapper>

@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.edu.hospital.mapper.DepartmentMapper">
+  <select id="getAllDeptList" resultType="java.util.Map">
+    SELECT *
+    FROM department
+    WHERE dept_type = "门诊"
+  </select>
+
+  <select id="getDeptmentByType" resultType="java.util.Map">
+    SELECT *
+    FROM department
+    WHERE dept_type = #{dept_type,jdbcType=VARCHAR}
+  </select>
+
+  <!-- 分页查询科室信息 -->
+  <select id="getDeptListByPage" resultType="java.util.Map">
+    SELECT *
+    FROM department
+    <where>
+      <if test="deptId != null and deptId != ''">
+        AND dept_code = #{deptId}
+      </if>
+      <if test="deptName != null and deptName != ''">
+        AND dept_name = #{deptName}
+      </if>
+    </where>
+    ORDER BY dept_code ASC
+    LIMIT ${(nowPageNumber - 1) * pageSize}, #{pageSize}
+  </select>
+
+
+  <!-- 查询总记录数 -->
+  <select id="getDeptListCount" resultType="java.lang.Integer">
+    SELECT COUNT(*)
+    FROM department
+    <where>
+      <if test="deptId != null and deptId != ''">
+        AND dept_code = #{deptId}
+      </if>
+      <if test="deptName != null and deptName != ''">
+        AND dept_name = #{deptName}
+      </if>
+    </where>
+  </select>
+
+  <!-- 新增科室 -->
+  <insert id="insertDepartment" parameterType="map">
+    INSERT INTO department (
+    dept_code,
+    dept_name,
+    dept_type,
+    delmark,
+    doctor_id,
+    strong_point
+    ) VALUES (
+    #{deptCode},
+    #{deptName},
+    #{deptType},
+    0,  <!-- 默认未删除 -->
+    NULL, <!-- 医生ID暂为空 -->
+    #{strongPoint}
+    )
+  </insert>
+
+  <update id="updateDepartment" parameterType="map">
+    UPDATE department
+    SET
+      dept_code = #{deptCode},
+      dept_name = #{deptName},
+      dept_type = #{deptType},
+      strong_point = #{strongPoint}
+    WHERE id = #{id}
+  </update>
+
+  <delete id="deleteDepartmentByCode" parameterType="string">
+    DELETE FROM department
+    WHERE dept_code = #{deptCode}
+  </delete>
+
+
+</mapper>

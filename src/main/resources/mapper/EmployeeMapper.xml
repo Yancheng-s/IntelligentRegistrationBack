@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.edu.hospital.mapper.EmployeeMapper">
+  <select id="getRegistDoctorList" resultType="java.util.Map">
+    SELECT *
+    FROM employee e , scheduling s
+    WHERE e.deptment_id = #{deptmentId}
+    	AND e.regist_level_id = #{registLevelId}
+    	AND e.scheduling_id = s.id
+  </select>
+
+  <select id="getEmployeeAndDeptByNamePass" resultType="java.util.Map">
+    SELECT e.id id,e.realname realname,d.id deptment_id,d.dept_name dept_name,d.dept_type dept_type
+    FROM employee e,department d
+    WHERE e.deptment_id = d.id
+    	AND realname=#{realname,jdbcType=VARCHAR}
+    	AND password=#{password,jdbcType=VARCHAR}
+  </select>
+
+    <select id="getDoctorListByName" resultType="java.util.Map">
+        SELECT *
+        FROM employee e
+        LEFT JOIN scheduling s ON e.scheduling_id = s.id
+        <where>
+            <if test="realname != null and realname != ''">
+                AND e.realname = #{realname}
+            </if>
+        </where>
+    </select>
+
+</mapper>

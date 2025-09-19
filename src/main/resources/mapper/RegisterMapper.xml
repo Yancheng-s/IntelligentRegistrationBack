@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.edu.hospital.mapper.RegisterMapper">
+	<!-- 添加注册信息 -->
+	<insert id="addRegister" parameterType="java.util.Map">
+		INSERT INTO register
+		<trim prefix='(' suffix=")" suffixOverrides=",">
+			<if test="id != null and id != '' ">
+				id,
+			</if>
+			<if test="case_number != null and case_number !='' ">
+				case_number,
+			</if>
+			<if test="real_name != null and real_name !='' ">
+				real_name,
+			</if>
+			<if test="gender != null and gender !='' ">
+				gender,
+			</if>
+			<if test="card_number != null and card_number !='' ">
+				card_number,
+			</if>
+			<if test="birthday != null and birthday !='' ">
+				birthday,
+			</if>
+			<if test="age != null and age !='' ">
+				age,
+			</if>
+			<if test="age_type != null and age_type !='' ">
+				age_type,
+			</if>
+			<if test="home_address != null and home_address != '' ">
+				home_address,
+			</if>
+			<if test="visit_date != null ">
+				visit_date,
+			</if>
+			<if test="noon != null and noon != '' ">
+				noon,
+			</if>
+			<if test="deptment_id != null and deptment_id != '' ">
+				deptment_id,
+			</if>
+			<if test="employee_id != null and employee_id !='' ">
+				employee_id,
+			</if>
+			<if test="regist_level_id != null and regist_level_id !='' ">
+				regist_level_id,
+			</if>
+			<if test="settle_category_id != null and settle_category_id !='' ">
+				settle_category_id,
+			</if>
+			<if test="is_book != null and is_book != '' ">
+				is_book,
+			</if>
+			<if test="regist_method != null and regist_method !='' ">
+				regist_method,
+			</if>
+			<if test="regist_money != null and regist_money != '' ">
+				regist_money,
+			</if>
+			<if test="visit_state != null and visit_state !='' ">
+				visit_state,
+			</if>
+		</trim>
+		<trim prefix="VALUES (" suffix=")" suffixOverrides=",">
+			<if test="id != null and id != '' ">
+				#{id,jdbcType=INTEGER},
+			</if>
+			<if test="case_number != null and case_number !='' ">
+				#{case_number,jdbcType=VARCHAR},
+			</if>
+			<if test="real_name != null and real_name !='' ">
+				#{real_name,jdbcType=VARCHAR},
+			</if>
+			<if test="gender != null and gender !='' ">
+				#{gender,jdbcType=VARCHAR},
+			</if>
+			<if test="card_number != null and card_number !='' ">
+				#{card_number,jdbcType=VARCHAR},
+			</if>
+			<if test="birthday != null and birthday !='' ">
+				#{birthday,jdbcType=DATE},
+			</if>
+			<if test="age != null and age !='' ">
+				#{age,jdbcType=INTEGER},
+			</if>
+			<if test="age_type != null and age_type !='' ">
+				#{age_type,jdbcType=VARCHAR},
+			</if>
+			<if test="home_address != null and home_address != '' ">
+				#{home_address,jdbcType=VARCHAR},
+			</if>
+			<if test="visit_date != null ">
+				#{visit_date,jdbcType=TIMESTAMP},
+			</if>
+			<if test="noon != null and noon != '' ">
+				#{noon,jdbcType=VARCHAR},
+			</if>
+			<if test="deptment_id != null and deptment_id != '' ">
+				#{deptment_id,jdbcType=VARCHAR},
+			</if>
+			<if test="employee_id != null and employee_id !='' ">
+				#{employee_id,jdbcType=VARCHAR},
+			</if>
+			<if test="regist_level_id != null and regist_level_id !='' ">
+				#{regist_level_id,jdbcType=INTEGER},
+			</if>
+			<if test="settle_category_id != null and settle_category_id !='' ">
+				#{settle_category_id,jdbcType=INTEGER},
+			</if>
+			<if test="is_book != null and is_book != '' ">
+				#{is_book,jdbcType=VARCHAR},
+			</if>
+			<if test="regist_method != null and regist_method !='' ">
+				#{regist_method,jdbcType=VARCHAR},
+			</if>
+			<if test="regist_money != null and regist_money != '' ">
+				#{regist_money,jdbcType=DECIMAL},
+			</if>
+			<if test="visit_state != null and visit_state !='' ">
+				#{visit_state,jdbcType=INTEGER},
+			</if>
+		</trim>
+	</insert>
+
+
+	<!--  已挂号数量统计    按照日期  午别 医生 统计   visit_state状态为 1、2、3  -->
+  <select id="getAlreadyRegisterCount" resultType="java.lang.String">
+      SELECT  COUNT(*)
+      FROM register
+      WHERE visit_state &lt; 4
+      <if test="visitDate!=null and visitDate!='' ">
+          AND visit_date =#{visitDate}
+      </if>
+      <if test="noon!=null and noon!='' ">
+          AND noon =#{noon}
+      </if>
+      <if test="employeeId!=null and employeeId!='' ">
+          AND employee_id =#{employeeId}
+      </if>
+  </select>
+
+  <!-- 根据id更改患者挂号状态 -->
+  <update id="updateStateById">
+  UPDATE register
+  SET
+  	visit_state=#{visit_state,jdbcType=INTEGER}
+  WHERE
+  	id=#{id,jdbcType=INTEGER}
+  </update>
+
+  <!-- 得到最大病例号 -->
+  <select id="getMaxCaseNumber"  resultType="java.lang.String">
+  SELECT max(case_number)
+  FROM register
+  </select>
+
+
+
+  <!-- 根据病历号、用户名、状态取得患者（分页、查询） -->
+	<select id="getPagePatientByState" resultType="java.util.Map">
+	SELECT *
+	FROM register
+	WHERE visit_state = #{visit_state}
+		<if test="case_number!=null and case_number!=''">
+			AND case_number = #{case_number}
+		</if>
+		<if test="real_name!=null and real_name!=''">
+			AND real_name = #{real_name}
+		</if>
+		ORDER BY visit_date DESC
+		LIMIT ${(nowPageNumber-1) * pageSize} ,#{pageSize}
+	</select>
+	<!-- 根据病历号、用户名、状态取得患者数量（分页、查询） -->
+	<select id="getPagePatientByStateCount" resultType="java.lang.Integer">
+	SELECT count(*)
+	FROM register
+	WHERE visit_state = #{visit_state}
+		<if test="case_number!=null and case_number!=''">
+			AND case_number = #{case_number}
+		</if>
+		<if test="real_name!=null and real_name!=''">
+			AND real_name = #{real_name}
+		</if>
+	</select>
+
+	<!-- 获取已挂号患者列表 -->
+	<select id="getAlreadyRegisterPatients" resultType="java.util.Map">
+		SELECT *
+		FROM register
+		WHERE visit_state &lt; 4
+		<if test="realName != null and realName != ''">
+			AND real_name = #{realName}
+		</if>
+		ORDER BY visit_date DESC
+	</select>
+
+
+	<!-- 根据就诊人名字删除挂号记录 -->
+	<update id="updateStateByRealName" parameterType="map">
+		UPDATE register
+		SET visit_state = #{visitState}
+		WHERE real_name = #{realName}
+	</update>
+
+	<!-- 查询今天和昨日的所有挂号记录 -->
+	<select id="getTodayRegisterRecords" resultType="java.util.Map">
+		SELECT *
+		FROM register
+		WHERE DATE(visit_date) BETWEEN CURDATE() - INTERVAL 1 DAY AND CURDATE()
+		ORDER BY visit_date DESC
+	</select>
+
+	<!-- 根据条件查询挂号记录 -->
+	<select id="getRegisterListByCondition" resultType="java.util.Map">
+		SELECT *
+		FROM register
+		WHERE 1=1
+		<if test="search != null and search != ''">
+			AND (
+			real_name LIKE CONCAT('%', #{search}, '%')
+			OR case_number LIKE CONCAT('%', #{search}, '%')
+			OR card_number LIKE CONCAT('%', #{search}, '%')
+			)
+		</if>
+		<if test="visitState != null">
+			AND visit_state = #{visitState}
+		</if>
+		<if test="startDate != null and startDate != ''">
+			AND visit_date >= #{startDate}
+		</if>
+		<if test="endDate != null and endDate != ''">
+			AND visit_date <![CDATA[<=]]> #{endDate}
+		</if>
+		ORDER BY visit_date DESC
+	</select>
+
+
+
+
+</mapper>
