@@ -23,7 +23,7 @@ import java.util.List;
 @Scope("prototype")
 public class Aliyun {
 
-    private static final String API_KEY = "sk-c9b8659683a541bfaa8580448ca67766";
+    private static final String API_KEY = "YOU-API_KEY";
     private static final String MODEL_NAME = "qwen-turbo";
 
     private static final ThreadLocal<List<Message>> threadLocalMessages = ThreadLocal.withInitial(ArrayList::new);
