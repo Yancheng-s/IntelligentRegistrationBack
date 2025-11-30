@@ -2,6 +2,12 @@
 
 This is a backend project for a smart hospital registration system based on Spring Boot, providing complete management of the hospital registration process, department and doctor information management, user login and registration, and AI-powered intelligent hospital guidance.
 
+1. User Front-End Repository:  https://github.com/Yancheng-s/IntelligentRegistrationUserFront  
+
+2. Admin Front-End Repository:  https://github.com/Yancheng-s/IntelligentRegistrationAdminFront  
+
+3. Back-End Repository:  https://github.com/Yancheng-s/IntelligentRegistrationBack  
+
 ## Key Features
 
 - **Smart Guidance**: Integrated AI chatbot to provide intelligent consultation advice  
